@@ -1,8 +1,5 @@
-﻿using LojaWeb.DAO;
-using LojaWeb.Entidades;
-using LojaWeb.Infra;
+﻿using LojaWeb.Entidades;
 using LojaWeb.Models;
-using NHibernate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +12,6 @@ namespace LojaWeb.Controllers
     {
         //
         // GET: /Categorias/
-
-        private CategoriasDAO dao;
-        public CategoriasController(CategoriasDAO dao)
-        {
-            this.dao = dao;
-        }
 
         public ActionResult Index()
         {
@@ -35,14 +26,7 @@ namespace LojaWeb.Controllers
 
         public ActionResult Adiciona(Categoria categoria)
         {
-            //ISession session = NHibernateHelper.AbreSession();
-            //CategoriasDAO dao = new CategoriasDAO(session);
-            //dao.Adiciona(categoria);
-
-            //return RedirectToAction("Visualiza", new { id = categoria.Id });
-
-            dao.Adiciona(categoria);
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         public ActionResult Remove(int id)
@@ -53,21 +37,14 @@ namespace LojaWeb.Controllers
 
         public ActionResult Visualiza(int id)
         {
-            ISession session = NHibernateHelper.AbreSession();
-            CategoriasDAO dao = new CategoriasDAO(session);
-            Categoria categoria = dao.BuscaPorId(id);
-            session.Close();
 
+            Categoria categoria = new Categoria();
             return View(categoria);
+
         }
 
         public ActionResult Atualiza(Categoria categoria)
         {
-            ISession session = NHibernateHelper.AbreSession();
-            CategoriasDAO dao = new CategoriasDAO(session);
-            dao.Atualiza(categoria);
-            session.Close();
-
             return RedirectToAction("Index");
         }
 

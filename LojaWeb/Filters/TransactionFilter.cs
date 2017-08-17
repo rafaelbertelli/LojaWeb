@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-
 namespace LojaWeb.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
@@ -21,16 +20,23 @@ namespace LojaWeb.Filters
         }
         public override void OnActionExecuted(ActionExecutedContext contexto)
         {
-            if (contexto.Exception == null)
+            if (contexto.Exception != null)
             {
-                session.Transaction.Commit();
+                session.Transaction.Rollback();
+                session.Close();
+            }
+        }
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            if (filterContext.Exception == null)
+            {
+                this.session.Transaction.Commit();
             }
             else
             {
-                session.Transaction.Rollback();
+                this.session.Transaction.Rollback();
             }
-
-            session.Close();
+            this.session.Close();
         }
     }
 }

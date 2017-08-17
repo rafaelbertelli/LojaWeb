@@ -42,6 +42,11 @@ namespace LojaWeb.Controllers
 
             //return RedirectToAction("Visualiza", new { id = produto.Id });
 
+            if (produto.Categoria.Id == 0)
+            {
+                produto.Categoria = null;
+            }
+
             dao.Adiciona(produto);
             return View("Index");
         }
@@ -63,11 +68,15 @@ namespace LojaWeb.Controllers
 
         public ActionResult Atualiza(Produto produto)
         {
-            ISession session = NHibernateHelper.AbreSession();
-            ProdutosDAO dao = new ProdutosDAO(session);
-            dao.Atualiza(produto);
-            session.Close();
+            //ISession session = NHibernateHelper.AbreSession();
+            //ProdutosDAO dao = new ProdutosDAO(session);
 
+            if (produto.Categoria.Id == 0)
+            {
+                produto.Categoria = null;
+            }
+
+            dao.Atualiza(produto);
             return RedirectToAction("Index");
         }
 
