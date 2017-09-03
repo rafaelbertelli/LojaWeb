@@ -1,6 +1,7 @@
 ﻿using LojaWeb.Entidades;
 using LojaWeb.Models;
 using NHibernate;
+using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,29 +20,22 @@ namespace LojaWeb.DAO
 
         public void Adiciona(Categoria categoria)
         {
-            //ITransaction transaction = this.session.BeginTransaction();
-            this.session.Save(categoria);
-            //transaction.Commit();
+            session.Save(categoria);
         }
 
         public void Remove(Categoria categoria)
         {
-            //ITransaction transaction = this.session.BeginTransaction();
-            this.session.Delete(categoria);
-            //transaction.Commit();
 
         }
 
         public void Atualiza(Categoria categoria)
         {
-            //ITransaction transaction = this.session.BeginTransaction();
-            this.session.Merge(categoria);
-            //transaction.Commit();
+
         }
 
         public Categoria BuscaPorId(int id)
         {
-            return session.Get<Categoria>(id);
+            return null;
         }
 
         public IList<Categoria> Lista()
@@ -51,12 +45,19 @@ namespace LojaWeb.DAO
 
         public IList<Categoria> BuscaPorNome(string nome)
         {
-            return new List<Categoria>();
+            string hql = "from Categoria c where c.Nome = :nome";
+            IQuery query = session.CreateQuery(hql);
+            query.SetParameter("nome", nome);
+            return query.List<Categoria>();
         }
 
         public IList<ProdutosPorCategoria> ListaNumeroDeProdutosPorCategoria()
         {
-            return new List<ProdutosPorCategoria>();
+            string hql = "select p.Categoria as Categoria, count(p) as NumeroDeProdutos " +
+                         "from Produto p group by p.Categoria";
+            IQuery query = session.CreateQuery(hql);
+            query.SetResultTransformer(Transformers.AliasToBean<ProdutosPorCategoria>());
+            return query.List<ProdutosPorCategoria>();
         }
     }
 

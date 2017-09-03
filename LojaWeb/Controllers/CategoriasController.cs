@@ -1,4 +1,5 @@
-﻿using LojaWeb.Entidades;
+﻿using LojaWeb.DAO;
+using LojaWeb.Entidades;
 using LojaWeb.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace LojaWeb.Controllers
 {
     public class CategoriasController : Controller
     {
+        private CategoriasDAO dao;
         //
         // GET: /Categorias/
 
@@ -37,10 +39,8 @@ namespace LojaWeb.Controllers
 
         public ActionResult Visualiza(int id)
         {
-
             Categoria categoria = new Categoria();
             return View(categoria);
-
         }
 
         public ActionResult Atualiza(Categoria categoria)
@@ -56,16 +56,15 @@ namespace LojaWeb.Controllers
 
         public ActionResult BuscaPorNome(string nome)
         {
-            ViewBag.Nome = nome;
-
-            IList<Categoria> categorias = new List<Categoria>();
+            IList<Categoria> categorias = dao.BuscaPorNome(nome);
             return View(categorias);
         }
 
         public ActionResult NumeroDeProdutosPorCategoria()
         {
-            IList<ProdutosPorCategoria> produtosPorCategoria = new List<ProdutosPorCategoria>();
-            return View(produtosPorCategoria);
+            IList<ProdutosPorCategoria> lista = dao.ListaNumeroDeProdutosPorCategoria();
+
+            return View(lista);
         }
     }
 }

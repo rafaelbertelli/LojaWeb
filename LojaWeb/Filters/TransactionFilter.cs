@@ -18,9 +18,9 @@ namespace LojaWeb.Filters
         {
             session.BeginTransaction();
         }
-        public override void OnActionExecuted(ActionExecutedContext contexto)
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            if (contexto.Exception != null)
+            if (filterContext.Exception != null)
             {
                 session.Transaction.Rollback();
                 session.Close();

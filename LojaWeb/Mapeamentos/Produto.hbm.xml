@@ -7,6 +7,6 @@
     <property name="Nome"/>
     <property name="Preco"/>
 
-    <many-to-one name="Categoria" column="CategoriaId" fetch="join"/>
+    <many-to-one name="Categoria" column="CategoriaId" class="Categoria" fetch="join"/>
   </class>
 </hibernate-mapping>

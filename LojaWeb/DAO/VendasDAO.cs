@@ -11,11 +11,14 @@ namespace LojaWeb.DAO
     {
         private ISession session;
 
+        public VendasDAO(ISession session)
+        {
+            this.session = session;
+        }
+
         public void Adiciona(Venda venda)
         {
-            ITransaction transaction = this.session.BeginTransaction();
-            this.session.Save(venda);
-            transaction.Commit();
+            session.Save(venda);
         }
 
         public IList<Venda> Lista()

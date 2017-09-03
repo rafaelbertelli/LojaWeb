@@ -11,10 +11,10 @@ namespace LojaWeb.App_Start
     using Ninject;
     using Ninject.Web.Common;
     using NHibernate;
-    using LojaWeb.Infra;
-    using LojaWeb.Filters;
+    using Infra;
     using Ninject.Web.Mvc.FilterBindingSyntax;
     using System.Web.Mvc;
+    using Filters;
 
     public static class NinjectWebCommon 
     {
@@ -43,7 +43,7 @@ namespace LojaWeb.App_Start
         /// </summary>
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
-        { 
+        {
             var kernel = new StandardKernel();
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
@@ -58,11 +58,11 @@ namespace LojaWeb.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            kernel.Bind<ISession>().ToMethod(x => NHibernateHelper.AbreSession()).InRequestScope();
+            kernel.Bind<ISession>().ToMethod(
+                x => NHibernateHelper.AbreSession()).InRequestScope();
 
             int ordemExecucao = 1;
             kernel.BindFilter<TransactionFilter>(FilterScope.Global, ordemExecucao);
-
-        }        
+        }
     }
 }

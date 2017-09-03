@@ -17,49 +17,56 @@ namespace LojaWeb.DAO
         }
 
         public void Adiciona(Produto produto)
-        {
-            //ITransaction transaction = this.session.BeginTransaction();
-            this.session.Save(produto);
-            //transaction.Commit();
+        { 
+            session.Save(produto);
         }
 
         public void Remove(Produto produto)
         {
-            //ITransaction transaction = this.session.BeginTransaction();
-            this.session.Delete(produto);
-            //transaction.Commit();
+
         }
 
         public void Atualiza(Produto produto)
         {
-            //ITransaction transaction = this.session.BeginTransaction();
             this.session.Merge(produto);
-            //transaction.Commit();
         }
 
         public Produto BuscaPorId(int id)
         {
-            return session.Get<Produto>(id);
+            return this.session.Get<Produto>(id);
         }
 
         public IList<Produto> Lista()
         {
-            return new List<Produto>();
+            IQuery query = session.CreateQuery("from Produto");
+            return query.List<Produto>();
         }
 
         public IList<Produto> ProdutosComPrecoMaiorDoQue(double? preco)
         {
-            return new List<Produto>();
+            string hql = "from Produto p where p.Preco > :minimo";
+            IQuery query = session.CreateQuery(hql);
+            query.SetParameter("minimo", preco.GetValueOrDefault(0.0));
+            return query.List<Produto>();
         }
 
         public IList<Produto> ProdutosDaCategoria(string nomeCategoria)
         {
-            return new List<Produto>();
+            string hql = "from Produto p where p.Categoria.Nome = :nome";
+            IQuery query = session.CreateQuery(hql);
+            query.SetParameter("nome", nomeCategoria);
+            return query.List<Produto>();
         }
 
-        public IList<Produto> ProdutosDaCategoriaComPrecoMaiorDoQue(double? preco, string nomeCategoria)
+        public IList<Produto> ProdutosDaCategoriaComPrecoMaiorDoQue(
+        double? preco, string nomeCategoria)
         {
-            return new List<Produto>();
+            string hql = "from Produto p where p.Preco >= :minimo " +
+                          "and p.Categoria.Nome = :nome";
+            IQuery query = session.CreateQuery(hql);
+            query.SetParameter("nome", nomeCategoria);
+            query.SetParameter("minimo", preco.GetValueOrDefault(0.0));
+            return query.List<Produto>();
         }
 
         public IList<Produto> ListaPaginada(int paginaAtual)
